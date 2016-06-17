@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 
 let table:String = "User"
+let key_user:String = "user"
+let key_password:String = "password"
 
 class ViewController: UIViewController {
 
@@ -23,16 +25,19 @@ class ViewController: UIViewController {
         let instance:NSManagedObjectContext = appDelegate.managedObjectContext
         //table instance of coredata
         let user = NSEntityDescription.insertNewObjectForEntityForName(table, inManagedObjectContext: instance)
-        user.setValue("Ricardo", forKeyPath: "user")
-        user.setValue("123456", forKeyPath: "password")
+        user.setValue("Ricardo", forKeyPath: key_user)
+        user.setValue("123456", forKeyPath: key_password)
         
         _ = try? instance.save()
         
+        //table request
         let request = NSFetchRequest(entityName: table)
         
+        //validating if exists data
         if let list = try? instance.executeFetchRequest(request) where list.count > 0 {
+            //fetch all results
             for result in list {
-                print("user: \(result.user) - password: \(result.password)")
+                print("user: \(result.valueForKey(key_user)!) - password: \(result.valueForKey(key_password)!)")
             }
         }else{
             print("Sin resultados")
